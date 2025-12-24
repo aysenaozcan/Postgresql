@@ -59,3 +59,4 @@ Amaç; tablolar arası ilişkileri (1-to-Many, Many-to-Many), **JOIN**, **INSERT
 ➡️ **Many-to-Many ilişki**
 
 ---
+<img width="573" height="375" alt="image" src="https://github.com/user-attachments/assets/b177175c-949b-41b0-b9b4-72baefa90186" />
