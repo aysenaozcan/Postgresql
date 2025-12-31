@@ -261,4 +261,51 @@ BEGIN
     END LOOP;
 END $$;
 
+select * from order_items;
+SELECT COUNT(*) FROM order_items;
+SELECT COUNT(*) FROM orders;
+
+DO $$
+DECLARE
+    i INT;
+    o_min INT; o_max INT;
+    p_min INT; p_max INT;
+
+    oid INT;
+    pid INT;
+    qty INT;
+    disc NUMERIC(5,2);
+    price NUMERIC(10,2);
+BEGIN
+    SELECT MIN(order_id), MAX(order_id) INTO o_min, o_max FROM orders;
+    SELECT MIN(product_id), MAX(product_id) INTO p_min, p_max FROM products;
+
+    IF o_min IS NULL OR o_max IS NULL THEN
+        RAISE EXCEPTION 'orders tablosu bos.';
+    END IF;
+
+    IF p_min IS NULL OR p_max IS NULL THEN
+        RAISE EXCEPTION 'products tablosu bos.';
+    END IF;
+
+    FOR i IN 1..4000 LOOP
+        oid := o_min + floor(random() * (o_max - o_min + 1))::int;
+        pid := p_min + floor(random() * (p_max - p_min + 1))::int;
+
+        qty := (floor(random() * 5)::int + 1); -- 1-5 adet
+
+        disc := CASE
+            WHEN random() < 0.70 THEN 0
+            WHEN random() < 0.90 THEN 5
+            ELSE 10
+        END;
+
+        SELECT sale_price INTO price
+        FROM products
+        WHERE product_id = pid;
+
+        INSERT INTO order_items (order_id, product_id, quantity, unit_price, discount)
+        VALUES (oid, pid, qty, price, disc);
+    END LOOP;
+END $$;
 
