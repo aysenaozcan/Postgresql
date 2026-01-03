@@ -308,4 +308,16 @@ BEGIN
         VALUES (oid, pid, qty, price, disc);
     END LOOP;
 END $$;
+SELECT to_char(order_date, 'YYYY-MM') AS ym, COUNT(*) 
+FROM orders
+GROUP BY ym
+ORDER BY ym;
+select count(*) from order_items WHERE quantity = 5;
+
+UPDATE order_items
+SET discount = 5
+WHERE quantity = 5;
+
+
+ROLLBACK;
 
